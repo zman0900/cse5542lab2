@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 project (cse5542lab2)
-add_executable (lab2 lab2.cpp GlGlut.cpp)
+add_executable (lab2 lab2.cpp GlGlut.cpp Perimitives.cpp)
 if (WIN32)
 	include_directories(${CMAKE_SOURCE_DIR}/win32/include)
 	target_link_libraries (lab2 ${CMAKE_SOURCE_DIR}/win32/lib/freeglut.lib GL)

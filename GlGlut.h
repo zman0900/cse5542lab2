@@ -7,6 +7,8 @@
 #define GL_GLEXT_PROTOTYPES
 #include <GL/glut.h>
 
+#include "Perimitives.h"
+
 #define DEF_SCREEN_W 800
 #define DEF_SCREEN_H 800
 #define WINDOW_TITLE "CSE 5542 Lab 2 - Dan Ziemba"
@@ -15,7 +17,7 @@ namespace lab2 {
 
 class GlGlut {
 private:
-
+	Sphere *s;
 protected:
 	static GlGlut *instance;
 	int screen_width;
@@ -43,6 +45,6 @@ public:
 	void start(int *argc, char *argv[]);
 };
 
-}
+} // namespace lab2
 
 #endif

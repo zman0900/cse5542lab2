@@ -11,7 +11,7 @@ void GlGlut::display() {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-
+	s->draw();
 
 	glutSwapBuffers();
 }
@@ -99,10 +99,12 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	s = new Sphere(0.9, 20, 20, 0., 1., 0.);
+
 	// Start
 	reshape(screen_width, screen_height);
 	glutIdleFunc(idleWrapper);
 	glutMainLoop();
 }
 
-}
+} // namespace lab2
