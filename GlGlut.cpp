@@ -17,7 +17,7 @@ void GlGlut::display() {
 }
 
 void GlGlut::idle() {
-	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_MODELVIEW);
 	glRotatef(0.2, 1., 1., 1.);
 	glutPostRedisplay();
 }
