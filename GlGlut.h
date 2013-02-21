@@ -17,7 +17,10 @@ namespace lab2 {
 
 class GlGlut {
 private:
-	Primitive *ground;
+	Primitive *ground, *treeTrunk, *treeTop;
+
+	void drawClutter();
+	void initClutter();
 protected:
 	static GlGlut *instance;
 	int screen_width;

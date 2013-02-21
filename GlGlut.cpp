@@ -6,12 +6,28 @@ namespace lab2 {
 
 GlGlut *GlGlut::instance = NULL;
 
+void GlGlut::drawClutter() {
+	glPushMatrix();
+	glTranslated(-.45, 0., -.45);
+	glRotated(-90., 1., 0., 0.);
+	treeTrunk->draw();
+	glTranslated(.0, 0., 0.1);
+	treeTop->draw();
+	glPopMatrix();
+}
+
+void GlGlut::initClutter() {
+	treeTrunk = new Cone(.01, .01, .5, 10, 10, .300, .086, 0.);
+	treeTop = new Cone(.05, 0., .5, 20, 10, .078, .482, .110);
+}
+
 //// Glut callbacks /////
 void GlGlut::display() {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	ground->draw();
+	drawClutter();
 
 	glutSwapBuffers();
 }
@@ -107,6 +123,7 @@ void GlGlut::start(int *argc, char *argv[]) {
 	//p = new Box(.9, .9, .9, 0., 1., 0.);
 	//p = new Cone(0., .5, .5, 12, 4, 0., 1., 0.);
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
+	initClutter();
 
 	// Start
 	reshape(screen_width, screen_height);
