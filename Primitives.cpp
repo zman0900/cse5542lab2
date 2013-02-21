@@ -2,6 +2,8 @@
 
 #include "Primitives.h"
 
+using namespace std;
+
 namespace lab2 {
 
 Box::Box(float x, float y, float z, float red, float green, float blue) {
@@ -104,12 +106,12 @@ Box::Box(float x, float y, float z, float red, float green, float blue) {
 	t[35] = 6;
 
 	glGenBuffers(1, &vertex_handle);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);    
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*8, v, GL_STATIC_DRAW);     
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*8, v, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &triangle_handle); 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle); 
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*36, t, GL_STATIC_DRAW); 
+	glGenBuffers(1, &triangle_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*36, t, GL_STATIC_DRAW);
 
 	delete[] v;
 	delete[] t;
@@ -117,26 +119,101 @@ Box::Box(float x, float y, float z, float red, float green, float blue) {
 
 void Box::draw() {
 	//Inform OpenGL which handles to use
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle); 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle); 
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
 	//Enable the arrays on the client side
-	glEnableClientState(GL_VERTEX_ARRAY); 
-	glEnableClientState(GL_COLOR_ARRAY); 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 
-	// number of coordinates per vertex (4 here),  coordinate value format, 
+	// number of coordinates per vertex (4 here),  coordinate value format,
 	// stride between consecutive vertices, and pointers to the first coordinate
 	glVertexPointer(4, GL_FLOAT, sizeof(Vertex),
-	                reinterpret_cast<void*>(offsetof(Vertex, x))); 
+	                reinterpret_cast<void*>(offsetof(Vertex, x)));
 	glColorPointer(4, GL_FLOAT, sizeof(Vertex),
-	                reinterpret_cast<void*>(offsetof(Vertex, c))); 
+	                reinterpret_cast<void*>(offsetof(Vertex, c)));
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//Now we are ready to draw, using the triangle indices in the buffer 
+	//Now we are ready to draw, using the triangle indices in the buffer
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,
-	               reinterpret_cast<void*>(0)); 
+	               reinterpret_cast<void*>(0));
 
 	//Disable the arrays on the client side
-	glDisableClientState(GL_VERTEX_ARRAY); 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+}
+
+Cone::Cone(float bottom_r, float top_r, float height, int _slices, int _stacks,
+	     float red, float green, float blue) {
+	slices = _slices;
+	stacks = _stacks;
+
+	#define radius(z) ((bottom_r)-((z)/((height)/((bottom_r)-(top_r)))))
+
+	Vertex *v = new Vertex[slices*(stacks+1)];
+	for (int i=0; i<=stacks; i++) {
+		float z = i * (height/(float)stacks);
+		for (int j=0; j<slices; j++) {
+			float theta = (j*2*M_PI)/slices;
+			v[i*slices+j].x[0] = radius(z) * cos(theta);
+			v[i*slices+j].x[1] = radius(z) * sin(theta);
+			v[i*slices+j].x[2] = z;
+			v[i*slices+j].x[3] = 1.;
+			v[i*slices+j].c[0] = red;
+			v[i*slices+j].c[1] = green;
+			v[i*slices+j].c[2] = blue;
+			v[i*slices+j].c[3] = 1.;
+		}
+	}
+
+	GLuint *t = new GLuint[slices*stacks*6];
+	int p = 0;
+	for (int i=0; i<stacks; i++) {
+		for (int j=0; j<slices; j++) {
+			t[p++] = i*slices + j;
+			t[p++] = i*slices + (j+1 == slices ? 0 : j+1);
+			t[p++] = (i+1)*slices + j;
+			t[p++] = i*slices + (j+1 == slices ? 0 : j+1);
+			t[p++] = (i+1)*slices + (j+1 == slices ? 0 : j+1);
+			t[p++] = (i+1)*slices + j;
+		}
+	}
+
+	glGenBuffers(1, &vertex_handle);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*slices*(stacks+1), v,
+	             GL_STATIC_DRAW);
+
+	glGenBuffers(1, &triangle_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*slices*stacks*6, t,
+	             GL_STATIC_DRAW);
+
+	delete[] v;
+	delete[] t;
+}
+
+void Cone::draw() {
+	//Inform OpenGL which handles to use
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
+	//Enable the arrays on the client side
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	// number of coordinates per vertex (4 here),  coordinate value format,
+	// stride between consecutive vertices, and pointers to the first coordinate
+	glVertexPointer(4, GL_FLOAT, sizeof(Vertex),
+	                reinterpret_cast<void*>(offsetof(Vertex, x)));
+	glColorPointer(4, GL_FLOAT, sizeof(Vertex),
+	                reinterpret_cast<void*>(offsetof(Vertex, c)));
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//Now we are ready to draw, using the triangle indices in the buffer
+	glDrawElements(GL_TRIANGLES, slices*stacks*6, GL_UNSIGNED_INT,
+	               reinterpret_cast<void*>(0));
+
+	//Disable the arrays on the client side
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 
@@ -154,11 +231,11 @@ Sphere::Sphere(float radius, int _m, int _n, float red, float green,
 		vertices[i*(n+1)+j].x[0] = radius * cos(phi) * cos(theta);
 		vertices[i*(n+1)+j].x[1] = radius * cos(phi) * sin(theta);
 		vertices[i*(n+1)+j].x[2] = radius * sin(phi);
-		vertices[i*(n+1)+j].x[3] = 1;
+		vertices[i*(n+1)+j].x[3] = 1.;
 		vertices[i*(n+1)+j].c[0] = red;
 		vertices[i*(n+1)+j].c[1] = green;
 		vertices[i*(n+1)+j].c[2] = blue;
-		vertices[i*(n+1)+j].c[3] = 1;            
+		vertices[i*(n+1)+j].c[3] = 1.;
 	}
 
 	GLuint *triangles = new GLuint[m*n*6];
@@ -168,22 +245,22 @@ Sphere::Sphere(float radius, int _m, int _n, float red, float green,
 	{
 		triangles[p++]=(i  )*(n+1)+j;
 		triangles[p++]=(i  )*(n+1)+j+1;
-		triangles[p++]=(i+1)*(n+1)+j+1;            
+		triangles[p++]=(i+1)*(n+1)+j+1;
 		triangles[p++]=(i  )*(n+1)+j;
 		triangles[p++]=(i+1)*(n+1)+j+1;
-		triangles[p++]=(i+1)*(n+1)+j; 
+		triangles[p++]=(i+1)*(n+1)+j;
 	}
 
 	glGenBuffers(1, &vertex_handle);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);    
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(m+1)*(n+1), vertices,
-	             GL_STATIC_DRAW);     
+	             GL_STATIC_DRAW);
 
 	//Create the triangle handle and copy the data to the GPU memory
-	glGenBuffers(1, &triangle_handle); 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle); 
+	glGenBuffers(1, &triangle_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*m*n*6, triangles,
-	             GL_STATIC_DRAW); 
+	             GL_STATIC_DRAW);
 
 	delete[] vertices;
 	delete[] triangles;
@@ -191,26 +268,26 @@ Sphere::Sphere(float radius, int _m, int _n, float red, float green,
 
 void Sphere::draw() {
 	//Inform OpenGL which handles to use
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle); 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle); 
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_handle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_handle);
 	//Enable the arrays on the client side
-	glEnableClientState(GL_VERTEX_ARRAY); 
-	glEnableClientState(GL_COLOR_ARRAY); 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 
-	// number of coordinates per vertex (4 here),  coordinate value format, 
+	// number of coordinates per vertex (4 here),  coordinate value format,
 	// stride between consecutive vertices, and pointers to the first coordinate
 	glVertexPointer(4, GL_FLOAT, sizeof(Vertex),
-	                reinterpret_cast<void*>(offsetof(Vertex, x))); 
+	                reinterpret_cast<void*>(offsetof(Vertex, x)));
 	glColorPointer(4, GL_FLOAT, sizeof(Vertex),
-	                reinterpret_cast<void*>(offsetof(Vertex, c))); 
+	                reinterpret_cast<void*>(offsetof(Vertex, c)));
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//Now we are ready to draw, using the triangle indices in the buffer 
+	//Now we are ready to draw, using the triangle indices in the buffer
 	glDrawElements(GL_TRIANGLES, m*n*6, GL_UNSIGNED_INT,
-	               reinterpret_cast<void*>(0)); 
+	               reinterpret_cast<void*>(0));
 
 	//Disable the arrays on the client side
-	glDisableClientState(GL_VERTEX_ARRAY); 
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 

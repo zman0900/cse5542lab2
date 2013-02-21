@@ -101,8 +101,9 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//p = new Sphere(0.9, 60, 60, 0., 1., 0.);
-	p = new Box(.9, .9, .9, 0., 1., 0.);
+	//p = new Sphere(0.9, 10, 10, 0., 1., 0.);
+	//p = new Box(.9, .9, .9, 0., 1., 0.);
+	p = new Cone(.5, 0., .5, 12, 4, 0., 1., 0.);
 
 	// Start
 	reshape(screen_width, screen_height);

@@ -25,6 +25,15 @@ public:
 	void draw();
 };
 
+class Cone : public Primitive {
+protected:
+	int slices, stacks;
+public:
+	Cone(float bottom_r, float top_r, float height, int slices, int stacks,
+	     float red, float green, float blue);
+	void draw();
+};
+
 class Sphere : public Primitive {
 protected:
 	int m, n;
