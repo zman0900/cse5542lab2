@@ -11,13 +11,15 @@ void GlGlut::display() {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	s->draw();
+	p->draw();
 
 	glutSwapBuffers();
 }
 
 void GlGlut::idle() {
-
+	glMatrixMode(GL_PROJECTION);
+	glRotatef(0.2, 1., 1., 1.);
+	glutPostRedisplay();
 }
 
 void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
@@ -99,7 +101,8 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	s = new Sphere(0.9, 20, 20, 0., 1., 0.);
+	//p = new Sphere(0.9, 60, 60, 0., 1., 0.);
+	p = new Box(.9, .9, .9, 0., 1., 0.);
 
 	// Start
 	reshape(screen_width, screen_height);

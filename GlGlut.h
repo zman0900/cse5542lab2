@@ -7,7 +7,7 @@
 #define GL_GLEXT_PROTOTYPES
 #include <GL/glut.h>
 
-#include "Perimitives.h"
+#include "Primitives.h"
 
 #define DEF_SCREEN_W 800
 #define DEF_SCREEN_H 800
@@ -17,7 +17,7 @@ namespace lab2 {
 
 class GlGlut {
 private:
-	Sphere *s;
+	Primitive *p;
 protected:
 	static GlGlut *instance;
 	int screen_width;

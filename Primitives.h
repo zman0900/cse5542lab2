@@ -11,13 +11,25 @@ typedef struct {
     float c[4];     //Vertex Color
 } Vertex;
 
-class Sphere {
+class Primitive {
 protected:
-	int m, n;
 	GLuint vertex_handle;   
 	GLuint triangle_handle;
 public:
-	Sphere(float radius, int _m, int _n, float red, float green, float blue);
+	virtual void draw() =0;
+};
+
+class Box : public Primitive {
+public:
+	Box(float x, float y, float z, float red, float green, float blue);
+	void draw();
+};
+
+class Sphere : public Primitive {
+protected:
+	int m, n;
+public:
+	Sphere(float radius, int m, int n, float red, float green, float blue);
 	void draw();
 };
 
