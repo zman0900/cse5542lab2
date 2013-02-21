@@ -17,7 +17,7 @@ namespace lab2 {
 
 class GlGlut {
 private:
-	Primitive *p;
+	Primitive *ground;
 protected:
 	static GlGlut *instance;
 	int screen_width;

@@ -42,6 +42,14 @@ public:
 	void draw();
 };
 
+class SquarePlane : public Primitive {
+protected:
+	int div;
+public:
+	SquarePlane(float size, int div, float red, float green, float blue);
+	void draw();
+};
+
 } // namespace lab2
 
 #endif
