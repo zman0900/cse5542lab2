@@ -198,7 +198,7 @@ void GlGlut::idle() {
 
 	if (animationEnabled) {
 		// Rotate one degree at a time
-		if (bodyRotateAngle < 360) bodyRotateAngle += 1;
+		if (bodyRotateAngle < 360-1) bodyRotateAngle += 1;
 		else bodyRotateAngle = 0;
 		// Move forward correct distance
 		bodyForwardX += distPerStep*sin(bodyRotateAngle*(M_PI/180));
@@ -233,7 +233,7 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 			break;
 		case 't':
 			if (!animationEnabled) {
-				if (bodyRotateAngle < 360) bodyRotateAngle += 5;
+				if (bodyRotateAngle < 360-5) bodyRotateAngle += 5;
 				else bodyRotateAngle = 0;
 				updateCamera();
 			}
