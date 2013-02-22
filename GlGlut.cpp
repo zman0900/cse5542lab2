@@ -9,6 +9,24 @@ GlGlut *GlGlut::instance = NULL;
 void GlGlut::drawClutter() {
 	glPushMatrix();
 	glTranslated(-.45, 0., -.45);
+	drawTree();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(.45, 0., -.45);
+	drawTree();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(-.45, 0., .45);
+	drawTree();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(.45, 0., .45);
+	drawTree();
+	glPopMatrix();
+}
+
+void GlGlut::drawTree() {
+	glPushMatrix();
 	glRotated(-90., 1., 0., 0.);
 	treeTrunk->draw();
 	glTranslated(.0, 0., 0.1);

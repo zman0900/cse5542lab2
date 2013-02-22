@@ -20,6 +20,7 @@ private:
 	Primitive *ground, *treeTrunk, *treeTop;
 
 	void drawClutter();
+	void drawTree();
 	void initClutter();
 protected:
 	static GlGlut *instance;
