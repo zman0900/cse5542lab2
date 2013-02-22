@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
 	cout << "\t'r' - lower left arm, right leg; lift right arm, left leg" << endl;
 	cout << "\t'o' - rotate entire scene" << endl;
 	cout << "\t'a' - toggle animation of blob man (f, t, T disabled)" << endl;
+	cout << "\t'v' - first person view" << endl;
 
 	lab2::GlGlut g;
 	g.start(&argc, argv);

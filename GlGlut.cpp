@@ -168,6 +168,17 @@ void GlGlut::initClutter() {
 	ball = new Sphere(.0375, 10, 10, 0., 1., 0.);
 }
 
+void GlGlut::updateCamera() {
+	if (firstPerson) {
+		glLoadIdentity();
+		gluLookAt(0., .295, 0., 0., 0., 1., 0., 1., 0.);
+		// Rotate body command
+		glRotated(-1*bodyRotateAngle, 0., 1., 0.);
+		// Move forward command
+		glTranslated(-1*bodyForwardX, 0., -1*bodyForwardZ);
+	}
+}
+
 //// Glut callbacks /////
 void GlGlut::display() {
 	glClearColor(0, 0, 0, 1);
@@ -197,6 +208,8 @@ void GlGlut::idle() {
 		if (armLegAngleInc && armLegAngle >= 90) armLegAngleInc = 0;
 		else if (!armLegAngleInc && armLegAngle <= 0) armLegAngleInc = 1;
 		armLegAngleInc ? armLegAngle += 10 : armLegAngle -= 10;
+		// Camera
+		updateCamera();
 	}
 
 	glutPostRedisplay();
@@ -209,7 +222,7 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 			exit(EXIT_SUCCESS);
 			break;
 		case 'o':
-			glRotated(5., 0., 1., 0.);
+			if (!firstPerson) glRotated(5., 0., 1., 0.);
 			break;
 		case 'l':
 			armLegAngle += 5;
@@ -223,18 +236,21 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 			if (!animationEnabled) {
 				if (bodyRotateAngle < 360) bodyRotateAngle += 5;
 				else bodyRotateAngle = 0;
+				updateCamera();
 			}
 			break;
 		case 'T':
 			if (!animationEnabled) {
 				if (bodyRotateAngle > 0) bodyRotateAngle -= 5;
 				else bodyRotateAngle = 360;
+				updateCamera();
 			}
 			break;
 		case 'f':
 			if (!animationEnabled) {
 				bodyForwardX += 0.01*sin(bodyRotateAngle*(M_PI/180));
 				bodyForwardZ += 0.01*cos(bodyRotateAngle*(M_PI/180));
+				updateCamera();
 			}
 			break;
 		case 'a':
@@ -247,6 +263,16 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 				armLegAngle = 0;
 				animationEnabled = 1;
 				armLegAngleInc = 1;
+			}
+			break;
+		case 'v':
+			if (firstPerson) {
+				firstPerson = 0;
+				glLoadIdentity();
+				gluLookAt(0., 0.2, 1., 0., 0., -1., 0., 1., 0.);
+			} else {
+				firstPerson = 1;
+				updateCamera();
 			}
 			break;
 		default:
@@ -323,13 +349,11 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glLoadIdentity();
 	gluLookAt(0., 0.2, 1., 0., 0., -1., 0., 1., 0.);
 
-	//p = new Sphere(0.9, 10, 10, 0., 1., 0.);
-	//p = new Box(.9, .9, .9, 0., 1., 0.);
-	//p = new Cone(0., .5, .5, 12, 4, 0., 1., 0.);
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
 	initBlobMan();
 	initClutter();
-	animationEnabled = 1;
+	animationEnabled = 0;
+	firstPerson = 0;
 
 	// Start
 	reshape(screen_width, screen_height);

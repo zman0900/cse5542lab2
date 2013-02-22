@@ -26,6 +26,7 @@ private:
 	float bodyForwardX, bodyForwardZ;
 	int animationEnabled;
 	int armLegAngleInc;  // Only used for auto animation
+	int firstPerson;
 
 	void drawArm(double angle);
 	void drawBlobMan();
@@ -34,6 +35,7 @@ private:
 	void drawTree(float space);
 	void initBlobMan();
 	void initClutter();
+	void updateCamera();
 protected:
 	static GlGlut *instance;
 	int screen_width;
