@@ -24,6 +24,8 @@ private:
 	int armLegAngle;
 	int bodyRotateAngle;
 	float bodyForwardX, bodyForwardZ;
+	int animationEnabled;
+	int armLegAngleInc;  // Only used for auto animation
 
 	void drawArm(double angle);
 	void drawBlobMan();

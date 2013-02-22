@@ -184,6 +184,21 @@ void GlGlut::idle() {
 	if (treeSpaceDir && treeSpace >= 0.05) treeSpaceDir = 0;
 	else if (!treeSpaceDir && treeSpace <= 0.) treeSpaceDir = 1;
 	treeSpace = (treeSpaceDir ? treeSpace + 0.001 : treeSpace - 0.001);
+
+	if (animationEnabled) {
+		// Rotate one degree at a time
+		if (bodyRotateAngle < 360) bodyRotateAngle += 1;
+		else bodyRotateAngle = 0;
+		// Radius = 0.424264, so circumference = 2.66573
+		// Move 0.007405 per degreee
+		bodyForwardX += 0.007405*sin(bodyRotateAngle*(M_PI/180));
+		bodyForwardZ += 0.007405*cos(bodyRotateAngle*(M_PI/180));
+		// Move the legs
+		if (armLegAngleInc && armLegAngle >= 90) armLegAngleInc = 0;
+		else if (!armLegAngleInc && armLegAngle <= 0) armLegAngleInc = 1;
+		armLegAngleInc ? armLegAngle += 10 : armLegAngle -= 10;
+	}
+
 	glutPostRedisplay();
 }
 
@@ -205,16 +220,34 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 			if (armLegAngle <= 0) armLegAngle = 0;
 			break;
 		case 't':
-			if (bodyRotateAngle < 360) bodyRotateAngle += 5;
-			else bodyRotateAngle = 0;
+			if (!animationEnabled) {
+				if (bodyRotateAngle < 360) bodyRotateAngle += 5;
+				else bodyRotateAngle = 0;
+			}
 			break;
 		case 'T':
-			if (bodyRotateAngle > 0) bodyRotateAngle -= 5;
-			else bodyRotateAngle = 360;
+			if (!animationEnabled) {
+				if (bodyRotateAngle > 0) bodyRotateAngle -= 5;
+				else bodyRotateAngle = 360;
+			}
 			break;
 		case 'f':
-			bodyForwardX += 0.01*sin(bodyRotateAngle*(M_PI/180));
-			bodyForwardZ += 0.01*cos(bodyRotateAngle*(M_PI/180));
+			if (!animationEnabled) {
+				bodyForwardX += 0.01*sin(bodyRotateAngle*(M_PI/180));
+				bodyForwardZ += 0.01*cos(bodyRotateAngle*(M_PI/180));
+			}
+			break;
+		case 'a':
+			if (animationEnabled) {
+				animationEnabled = 0;
+			} else {
+				bodyRotateAngle = 45;
+				bodyForwardX = -0.3;
+				bodyForwardZ = 0.3;
+				armLegAngle = 0;
+				animationEnabled = 1;
+				armLegAngleInc = 1;
+			}
 			break;
 		default:
 			//cout << "unused key: " << (int) key << endl;
@@ -296,6 +329,7 @@ void GlGlut::start(int *argc, char *argv[]) {
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
 	initBlobMan();
 	initClutter();
+	animationEnabled = 1;
 
 	// Start
 	reshape(screen_width, screen_height);
