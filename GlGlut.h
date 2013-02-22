@@ -27,6 +27,7 @@ private:
 	int animationEnabled;
 	int armLegAngleInc;  // Only used for auto animation
 	int firstPerson;
+	double distPerStep;
 
 	void drawArm(double angle);
 	void drawBlobMan();

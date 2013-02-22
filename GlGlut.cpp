@@ -200,10 +200,9 @@ void GlGlut::idle() {
 		// Rotate one degree at a time
 		if (bodyRotateAngle < 360) bodyRotateAngle += 1;
 		else bodyRotateAngle = 0;
-		// Radius = 0.424264, so circumference = 2.66573
-		// Move 0.007405 per degreee
-		bodyForwardX += 0.007405*sin(bodyRotateAngle*(M_PI/180));
-		bodyForwardZ += 0.007405*cos(bodyRotateAngle*(M_PI/180));
+		// Move forward correct distance
+		bodyForwardX += distPerStep*sin(bodyRotateAngle*(M_PI/180));
+		bodyForwardZ += distPerStep*cos(bodyRotateAngle*(M_PI/180));
 		// Move the legs
 		if (armLegAngleInc && armLegAngle >= 90) armLegAngleInc = 0;
 		else if (!armLegAngleInc && armLegAngle <= 0) armLegAngleInc = 1;
@@ -354,6 +353,11 @@ void GlGlut::start(int *argc, char *argv[]) {
 	initClutter();
 	animationEnabled = 0;
 	firstPerson = 0;
+
+	// Setup distance to move body per animation step
+	double radius = sqrt((.3*.3)+(.3*.3));  // Start at x=.3, z=.3
+	double cir = 2*M_PI*radius;
+	distPerStep = cir / 360.;
 
 	// Start
 	reshape(screen_width, screen_height);
