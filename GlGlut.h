@@ -28,6 +28,7 @@ private:
 	void drawArm(double angle);
 	void drawBlobMan();
 	void drawClutter();
+	void drawLeg(double angle);
 	void drawTree(float space);
 	void initBlobMan();
 	void initClutter();

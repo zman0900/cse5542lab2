@@ -32,6 +32,32 @@ void GlGlut::drawArm(double angle) {
 	glPopMatrix();
 }
 
+void GlGlut::drawLeg(double angle) {
+	// Leg upper
+	glPushMatrix();
+	glRotated(angle, 1., 0., 0.);
+	glPushMatrix();
+	glTranslated(0., 0., -.0375);
+	glScaled(2., 2., 3.75);
+	pantSphere->draw();
+	glPopMatrix();
+	// Leg lower
+	glTranslated(0., 0., -.075);
+	glRotated(-1*angle, 1., 0., 0.);
+	glPushMatrix();
+	glTranslated(0., 0., -.0375);
+	glScaled(2., 2., 3.75);
+	pantSphere->draw();
+	glPopMatrix();
+	// Foot
+	glTranslated(0., 0., -.080);
+	glRotated(90., 1., 0., 0.);
+	glTranslated(0., 0., .02);
+	glScaled(1., 1., 2.);
+	skinSphere->draw();
+	glPopMatrix();
+}
+
 void GlGlut::drawBlobMan() {
 	glPushMatrix();
 	// Move forward command
@@ -39,7 +65,7 @@ void GlGlut::drawBlobMan() {
 	// Rotate body command
 	glRotated(bodyRotateAngle, 0., 1., 0.);
 	// Initial Position
-	glTranslated(0., .2, 0.);
+	glTranslated(0., .165, 0.);
 	glRotated(-90., 1., 0., 0.);
 	// Torso
 	glPushMatrix();
@@ -47,6 +73,7 @@ void GlGlut::drawBlobMan() {
 	torso->draw();
 	glPopMatrix();
 	// Neck
+	glPushMatrix(); // For neck, head, arms
 	glTranslated(0., 0., .1);
 	neck->draw();
 	// Head
@@ -64,6 +91,17 @@ void GlGlut::drawBlobMan() {
 	glPushMatrix();
 	glTranslated(.05, 0., 0.);
 	drawArm(-90 - -1*armLegAngle);
+	glPopMatrix();
+	glPopMatrix(); // End neck, head, arms
+	// Left leg
+	glPushMatrix();
+	glTranslated(-.03, 0., 0.);
+	drawLeg(-90 - -1*armLegAngle);
+	glPopMatrix();
+	// Right leg
+	glPushMatrix();
+	glTranslated(.03, 0., 0.);
+	drawLeg(-1*armLegAngle);
 	glPopMatrix();
 	// Done
 	glPopMatrix();
@@ -110,9 +148,9 @@ void GlGlut::drawTree(float space) {
 
 void GlGlut::initBlobMan() {
 	armLegAngle = 0;
-	bodyRotateAngle = 0;
-	bodyForwardX = 0.;
-	bodyForwardZ = 0.5;
+	bodyRotateAngle = 45;
+	bodyForwardX = -0.3;
+	bodyForwardZ = 0.3;
 	torso = new Cone(.01, .01, .1, 10, 10, 1., 0., 0.);
 	neck = new Cone(.01, .01, .01, 10, 2, .788, .576, .541);
 	skinSphere = new Sphere(.01, 10, 10, .788, .576, .541);
