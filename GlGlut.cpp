@@ -7,29 +7,30 @@ namespace lab2 {
 GlGlut *GlGlut::instance = NULL;
 
 void GlGlut::drawClutter() {
+	// Trees
 	glPushMatrix();
 	glTranslated(-.45, 0., -.45);
-	drawTree();
+	drawTree(treeSpace);
 	glPopMatrix();
 	glPushMatrix();
 	glTranslated(.45, 0., -.45);
-	drawTree();
+	drawTree(0.05 - treeSpace);
 	glPopMatrix();
 	glPushMatrix();
 	glTranslated(-.45, 0., .45);
-	drawTree();
+	drawTree(0.05 - treeSpace);
 	glPopMatrix();
 	glPushMatrix();
 	glTranslated(.45, 0., .45);
-	drawTree();
+	drawTree(treeSpace);
 	glPopMatrix();
 }
 
-void GlGlut::drawTree() {
+void GlGlut::drawTree(float space) {
 	glPushMatrix();
 	glRotated(-90., 1., 0., 0.);
 	treeTrunk->draw();
-	glTranslated(.0, 0., 0.1);
+	glTranslated(.0, 0., 0.1 + space);
 	treeTop->draw();
 	glPopMatrix();
 }
@@ -37,6 +38,8 @@ void GlGlut::drawTree() {
 void GlGlut::initClutter() {
 	treeTrunk = new Cone(.01, .01, .5, 10, 10, .300, .086, 0.);
 	treeTop = new Cone(.05, 0., .5, 20, 10, .078, .482, .110);
+	treeSpace = 0.05;
+	treeSpaceDir = 1;
 }
 
 //// Glut callbacks /////
@@ -51,9 +54,10 @@ void GlGlut::display() {
 }
 
 void GlGlut::idle() {
-	//glMatrixMode(GL_MODELVIEW);
-	//glRotatef(0.2, 1., 1., 1.);
-	//glutPostRedisplay();
+	if (treeSpaceDir && treeSpace >= 0.05) treeSpaceDir = 0;
+	else if (!treeSpaceDir && treeSpace <= 0.) treeSpaceDir = 1;
+	treeSpace = (treeSpaceDir ? treeSpace + 0.001 : treeSpace - 0.001);
+	glutPostRedisplay();
 }
 
 void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {

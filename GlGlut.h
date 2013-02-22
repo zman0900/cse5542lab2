@@ -18,9 +18,11 @@ namespace lab2 {
 class GlGlut {
 private:
 	Primitive *ground, *treeTrunk, *treeTop;
+	float treeSpace;
+	int treeSpaceDir;
 
 	void drawClutter();
-	void drawTree();
+	void drawTree(float space);
 	void initClutter();
 protected:
 	static GlGlut *instance;
