@@ -24,6 +24,16 @@ void GlGlut::drawClutter() {
 	glTranslated(.45, 0., .45);
 	drawTree(treeSpace);
 	glPopMatrix();
+
+	// Pile of junk
+	glPushMatrix();
+	glTranslated(0., .05, 0.);
+	lowerBox->draw();
+	glTranslated(0., .075, 0.);
+	upperBox->draw();
+	glTranslated(0., .0625, 0.);
+	ball->draw();
+	glPopMatrix();
 }
 
 void GlGlut::drawTree(float space) {
@@ -40,6 +50,10 @@ void GlGlut::initClutter() {
 	treeTop = new Cone(.05, 0., .5, 20, 10, .078, .482, .110);
 	treeSpace = 0.05;
 	treeSpaceDir = 1;
+
+	lowerBox = new Box(.1, .1, .1, 0., 1., 0.);
+	upperBox = new Box(.05, .05, .05, 0., 1., 0.);
+	ball = new Sphere(.0375, 10, 10, 0., 1., 0.);
 }
 
 //// Glut callbacks /////

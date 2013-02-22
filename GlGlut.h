@@ -17,7 +17,7 @@ namespace lab2 {
 
 class GlGlut {
 private:
-	Primitive *ground, *treeTrunk, *treeTop;
+	Primitive *ball, *ground, *lowerBox, *treeTrunk, *treeTop, *upperBox;
 	float treeSpace;
 	int treeSpaceDir;
 
