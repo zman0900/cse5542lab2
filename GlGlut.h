@@ -18,11 +18,18 @@ namespace lab2 {
 class GlGlut {
 private:
 	Primitive *ball, *ground, *lowerBox, *treeTrunk, *treeTop, *upperBox;
+	Primitive *torso, *neck, *skinSphere, *pantSphere;
 	float treeSpace;
 	int treeSpaceDir;
+	int armLegAngle;
+	int bodyRotateAngle;
+	float bodyForwardX, bodyForwardZ;
 
+	void drawArm(double angle);
+	void drawBlobMan();
 	void drawClutter();
 	void drawTree(float space);
+	void initBlobMan();
 	void initClutter();
 protected:
 	static GlGlut *instance;

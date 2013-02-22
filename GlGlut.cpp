@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "GlGlut.h"
 
 using namespace std;
@@ -5,6 +7,67 @@ using namespace std;
 namespace lab2 {
 
 GlGlut *GlGlut::instance = NULL;
+
+void GlGlut::drawArm(double angle) {
+	// Arm upper
+	glPushMatrix();
+	glRotated(angle, 1., 0., 0.);
+	glPushMatrix();
+	glTranslated(0., 0., -.025);
+	glScaled(1., 1., 2.5);
+	skinSphere->draw();
+	glPopMatrix();
+	// Arm lower
+	glTranslated(0., 0., -.05);
+	glRotated(angle, 1., 0., 0.);
+	glPushMatrix();
+	glTranslated(0., 0., -.025);
+	glScaled(1., 1., 2.5);
+	skinSphere->draw();
+	glPopMatrix();
+	// Hand
+	glTranslated(0., 0., -.055);
+	glScaled(.5, .5, 1.);
+	skinSphere->draw();
+	glPopMatrix();
+}
+
+void GlGlut::drawBlobMan() {
+	glPushMatrix();
+	// Move forward command
+	glTranslated(bodyForwardX, 0., bodyForwardZ);
+	// Rotate body command
+	glRotated(bodyRotateAngle, 0., 1., 0.);
+	// Initial Position
+	glTranslated(0., .2, 0.);
+	glRotated(-90., 1., 0., 0.);
+	// Torso
+	glPushMatrix();
+	glScaled(5., 1., 1.);
+	torso->draw();
+	glPopMatrix();
+	// Neck
+	glTranslated(0., 0., .1);
+	neck->draw();
+	// Head
+	glPushMatrix();
+	glTranslated(0., 0., .03);
+	glScaled(2., 2., 2.);
+	skinSphere->draw();
+	glPopMatrix();
+	// Left Arm
+	glPushMatrix();
+	glTranslated(-.05, 0., 0.);
+	drawArm(-1*armLegAngle);
+	glPopMatrix();
+	// Right Arm
+	glPushMatrix();
+	glTranslated(.05, 0., 0.);
+	drawArm(-90 - -1*armLegAngle);
+	glPopMatrix();
+	// Done
+	glPopMatrix();
+}
 
 void GlGlut::drawClutter() {
 	// Trees
@@ -45,6 +108,17 @@ void GlGlut::drawTree(float space) {
 	glPopMatrix();
 }
 
+void GlGlut::initBlobMan() {
+	armLegAngle = 0;
+	bodyRotateAngle = 0;
+	bodyForwardX = 0.;
+	bodyForwardZ = 0.5;
+	torso = new Cone(.01, .01, .1, 10, 10, 1., 0., 0.);
+	neck = new Cone(.01, .01, .01, 10, 2, .788, .576, .541);
+	skinSphere = new Sphere(.01, 10, 10, .788, .576, .541);
+	pantSphere = new Sphere(.01, 10, 10, 0., 0., 1.);
+}
+
 void GlGlut::initClutter() {
 	treeTrunk = new Cone(.01, .01, .5, 10, 10, .300, .086, 0.);
 	treeTop = new Cone(.05, 0., .5, 20, 10, .078, .482, .110);
@@ -63,6 +137,7 @@ void GlGlut::display() {
 
 	ground->draw();
 	drawClutter();
+	drawBlobMan();
 
 	glutSwapBuffers();
 }
@@ -80,7 +155,29 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 		case 27: // Esc
 			exit(EXIT_SUCCESS);
 			break;
-
+		case 'o':
+			glRotated(5., 0., 1., 0.);
+			break;
+		case 'l':
+			armLegAngle += 5;
+			if (armLegAngle >= 90) armLegAngle = 90;
+			break;
+		case 'r':
+			armLegAngle -= 5;
+			if (armLegAngle <= 0) armLegAngle = 0;
+			break;
+		case 't':
+			if (bodyRotateAngle < 360) bodyRotateAngle += 5;
+			else bodyRotateAngle = 0;
+			break;
+		case 'T':
+			if (bodyRotateAngle > 0) bodyRotateAngle -= 5;
+			else bodyRotateAngle = 360;
+			break;
+		case 'f':
+			bodyForwardX += 0.01*sin(bodyRotateAngle*(M_PI/180));
+			bodyForwardZ += 0.01*cos(bodyRotateAngle*(M_PI/180));
+			break;
 		default:
 			//cout << "unused key: " << (int) key << endl;
 			return;
@@ -159,6 +256,7 @@ void GlGlut::start(int *argc, char *argv[]) {
 	//p = new Box(.9, .9, .9, 0., 1., 0.);
 	//p = new Cone(0., .5, .5, 12, 4, 0., 1., 0.);
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
+	initBlobMan();
 	initClutter();
 
 	// Start

@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
 	cout << "\t'T' - rotate body CW" << endl;
 	cout << "\t'l' - lift left arm, right leg; lower right arm, left leg" << endl;
 	cout << "\t'r' - lower left arm, right leg; lift right arm, left leg" << endl;
+	cout << "\t'o' - rotate entire scene" << endl;
+	cout << "\t'a' - toggle animation of blob man" << endl;
 
 	lab2::GlGlut g;
 	g.start(&argc, argv);
