@@ -176,6 +176,9 @@ void GlGlut::updateCamera() {
 		glRotated(-1*bodyRotateAngle, 0., 1., 0.);
 		// Move forward command
 		glTranslated(-1*bodyForwardX, 0., -1*bodyForwardZ);
+	} else {
+		glLoadIdentity();
+		gluLookAt(0., 0.4, 1., 0., 0., -.5, 0., 1., 0.);
 	}
 }
 
@@ -267,8 +270,7 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 		case 'v':
 			if (firstPerson) {
 				firstPerson = 0;
-				glLoadIdentity();
-				gluLookAt(0., 0.4, 1., 0., 0., -.5, 0., 1., 0.);
+				updateCamera();
 			} else {
 				firstPerson = 1;
 				updateCamera();
@@ -341,18 +343,18 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glutReshapeFunc(reshapeWrapper);
 
 	// Setup
+	animationEnabled = 0;
+	firstPerson = 0;
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(90., 1., 0., 4.);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0., 0.4, 1., 0., 0., -.5, 0., 1., 0.);
+	updateCamera();
 
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
 	initBlobMan();
 	initClutter();
-	animationEnabled = 0;
-	firstPerson = 0;
 
 	// Setup distance to move body per animation step
 	double radius = sqrt((.3*.3)+(.3*.3));  // Start at x=.3, z=.3
