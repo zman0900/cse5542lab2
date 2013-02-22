@@ -69,7 +69,7 @@ void GlGlut::drawBlobMan() {
 	glRotated(-90., 1., 0., 0.);
 	// Torso
 	glPushMatrix();
-	glScaled(5., 1., 1.);
+	glScaled(5., 2.5, 1.);
 	torso->draw();
 	glPopMatrix();
 	// Neck
