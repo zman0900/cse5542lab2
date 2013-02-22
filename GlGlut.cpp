@@ -268,7 +268,7 @@ void GlGlut::keyboard(unsigned char key, int mousex, int mousey) {
 			if (firstPerson) {
 				firstPerson = 0;
 				glLoadIdentity();
-				gluLookAt(0., 0.2, 1., 0., 0., -1., 0., 1., 0.);
+				gluLookAt(0., 0.4, 1., 0., 0., -.5, 0., 1., 0.);
 			} else {
 				firstPerson = 1;
 				updateCamera();
@@ -346,7 +346,7 @@ void GlGlut::start(int *argc, char *argv[]) {
 	gluPerspective(90., 1., 0., 4.);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0., 0.2, 1., 0., 0., -1., 0., 1., 0.);
+	gluLookAt(0., 0.4, 1., 0., 0., -.5, 0., 1., 0.);
 
 	ground = new SquarePlane(1., 20, 1., 1., 1.);
 	initBlobMan();
