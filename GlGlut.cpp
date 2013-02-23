@@ -193,6 +193,13 @@ void GlGlut::display() {
 }
 
 void GlGlut::idle() {
+	int nowTime = glutGet(GLUT_ELAPSED_TIME);
+	if (nowTime > lastTime + MSEC_PER_FRAME) {
+		lastTime = nowTime;
+	} else {
+		return;
+	}
+
 	if (treeSpaceDir && treeSpace >= 0.05) treeSpaceDir = 0;
 	else if (!treeSpaceDir && treeSpace <= 0.) treeSpaceDir = 1;
 	treeSpace = (treeSpaceDir ? treeSpace + 0.001 : treeSpace - 0.001);
@@ -352,6 +359,7 @@ void GlGlut::start(int *argc, char *argv[]) {
 	// Setup
 	animationEnabled = 0;
 	firstPerson = 0;
+	lastTime = -1;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

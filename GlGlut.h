@@ -20,6 +20,7 @@
 #define DEF_SCREEN_W 800
 #define DEF_SCREEN_H 800
 #define WINDOW_TITLE "CSE 5542 Lab 2 - Dan Ziemba"
+#define MSEC_PER_FRAME (1000/60) // 60fps max
 
 namespace lab2 {
 
@@ -36,6 +37,7 @@ private:
 	int armLegAngleInc;  // Only used for auto animation
 	int firstPerson;
 	double distPerStep;
+	int lastTime;
 
 	void drawArm(double angle);
 	void drawBlobMan();
