@@ -1,8 +1,18 @@
 #ifndef __PERIMITIVES_H__
 #define __PERIMITIVES_H__
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <GL/glew.h>
+#pragma comment(lib, "glew32.lib")
+#endif
+
 #define GL_GLEXT_PROTOTYPES
 #include <GL/glut.h>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <cstddef>
 
 namespace lab2 {
 

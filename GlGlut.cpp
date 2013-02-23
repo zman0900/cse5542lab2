@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "GlGlut.h"
 
 using namespace std;
@@ -341,6 +339,15 @@ void GlGlut::start(int *argc, char *argv[]) {
 	glutDisplayFunc(displayWrapper);
 	glutKeyboardFunc(keyboardWrapper);
 	glutReshapeFunc(reshapeWrapper);
+
+	// glew?
+#ifdef _WIN32
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		cerr << "Fatal Error: " << glewGetErrorString(err) << endl;
+		exit(1);
+	}
+#endif
 
 	// Setup
 	animationEnabled = 0;

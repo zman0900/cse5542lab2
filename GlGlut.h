@@ -1,11 +1,19 @@
 #ifndef __GLGLUT_H__
 #define __GLGLUG_H__
 
-#include <cstdlib>
-#include <iostream>
+#ifdef _WIN32
+#include <Windows.h>
+#include <GL/glew.h>
+#pragma comment(lib, "glew32.lib")
+#endif
 
 #define GL_GLEXT_PROTOTYPES
 #include <GL/glut.h>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 #include "Primitives.h"
 

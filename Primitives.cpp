@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "Primitives.h"
 
 using namespace std;
