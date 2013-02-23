@@ -12,14 +12,26 @@ Run the following in the source directory:
 
 Windows
 -------
-Open "Visual Studio Command Prompt"
-cd to the source directory
-Run the following:
-	wincompile.bat
-In Windows Explorer, ensure the the execute permissions are set for the
-following files:
-	lab2.exe
-	freeglut.dll
+A Visual Studio 2012 solution file is included.
+Ensure that you have (free)glut and glew installed and Visual Studio can them.
+
+For a 64 bit system and using freeglut, the following files in these locations
+might work:
+	C:\Windows\SysWOW64\freeglut.dll
+	C:\Windows\SysWOW64\glew32.dll
+	C:\Windows\SysWOW64\glew32mx.dll
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\freeglut.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\freeglut_ext.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\freeglut_std.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\glew.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\glut.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\glxew.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\GL\wglew.h
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib\freeglut.lib
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib\glew32.lib
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib\glew32mxs.lib
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib\glew32mx.lib
+	C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib\glew32s.lib
 
 Running the program
 ===================
@@ -31,26 +43,8 @@ From the source directory, run:
 
 Windows
 -------
-Double click lab2.exe or run lab2.exe from command prompt
+Find and double click cse5542lab2.exe or run from command prompt
 
 Program instructions
 ====================
 Running the program will display instructions on a console standard output.
-
-Notes on Windows
-================
-The freeglut library and headers are included.  The following files are from
-freeglut.sourceforge.net:
-	win32/include/GL/*
-	win32/lib/*
-	freeglut.dll
-
-No sln file is included for Visual Studio because the program will not link
-correctly, at least not on the lab computers.  If cmake is installed on 
-your copy of Windows, it can generate a Visual Studio solution by doing the 
-following:
-Open "Visual Studio Command Prompt"
-cd to source directory
-Run (don't forget the dot):
-	<path-to-cmake-bin>\cmake -G "Visual Studio 10" .
-Open the generated cse5542lab2.sln file
